@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { User } from '@prisma/client';
+
+	export let user: User;
 </script>
 
 <div class="dropdown dropdown-end">
@@ -6,7 +9,7 @@
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<label tabindex="0" class="btn btn-ghost btn-circle avatar">
 		<div class="w-10 rounded-full">
-			<img src="https://placeimg.com/80/80/people" alt="none" />
+			<img src={user.photo} alt="none" />
 		</div>
 	</label>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->

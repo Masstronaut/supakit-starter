@@ -30,6 +30,16 @@ Update it to include the database password you made when creating your supabase 
 
 Add the string to your .env file as `DATABASE_URL` to be able to work with prisma.
 
+#### Supabase redirect URL
+
+By default, the Supabase redirect URL for sign-in defaults to `localhost:3000`. Currently, a sveltekit/vite project runs on `localhost:5173` by default. You'll need to update one of these to get auth working. To do this in supabase, open the dashboard and navigate to:
+
+1. `-> Authentication`
+2. `-> URL Configuration`
+3. `-> Site URL`
+
+Update the value from `http://localhost:3000` to `http://localhost:5173` and press `Save`. Afterwards your sign in should work!
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
