@@ -10,7 +10,9 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"supabase:typegen": "supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/lib/types/supabase.ts",
+		".env": "dotenv-run-script .env --"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
@@ -21,6 +23,7 @@
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.7",
 		"daisyui": "^2.18.1",
+		"dotenv-run-script": "^0.2.0",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
@@ -28,7 +31,8 @@
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
-		"prisma": "^4.7.1",
+		"prisma": "^4.8.0",
+		"supabase": "^1.29.3",
 		"svelte": "^3.54.0",
 		"svelte-check": "^2.9.2",
 		"svelte-french-toast": "^1.0.3",
@@ -41,6 +45,8 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^4.7.1",
+		"@steeze-ui/heroicons": "^2.2.1",
+		"@steeze-ui/svelte-icon": "^1.3.2",
 		"@supabase/auth-helpers-sveltekit": "^0.8.6",
 		"@supabase/supabase-js": "^2.1.3",
 		"zod": "^3.19.1"
