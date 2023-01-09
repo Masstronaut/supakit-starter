@@ -6,6 +6,14 @@ This template is a work in progress and is not ready for use in production appli
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
+To get started, run the following commands to clone the repo and install dependencies:
+
+```bash
+npx degit masstronaut/supakit-starter my-supakit-project
+cd my-supakit-project
+npm i
+```
+
 ## Configuring Supakit
 
 ### Supabase
@@ -16,29 +24,41 @@ You'll need to get set up with your own supabase project. To get started:
 2. Create an account or sign up with GitHub
 3. Create a new supabase project. Make sure to note the database password!
 
-Once done, you'll need to add 2 values to your `.env` file (make sure it is included in your `.gitignore`!)
+Once done, you'll need to create a `.env` file at the root of your project and add 2 values to it (make sure to never commit your `.env` file!)
 
-1. `PUBLIC_SUPABASE_URL`
-2. `PUBLIC_SUPABASE_ANON_KEY`
+1. Your supabase public URL `PUBLIC_SUPABASE_URL`
+2. Your supabase anonymous key `PUBLIC_SUPABASE_ANON_KEY`
 
 These values can be found on your project's homepage on supabase. the URL will look like `https://app.supabase.com/project/{Your Project ID}`
 
 Finally, you'll need to add one more `.env` value that `prisma` will use to connect to your database. It's the "connection string" URI.
 You can find the URI for your project through the supabase UI by going to `Project Settings` -> `Database` -> `Connection string` and selecting "URI"
 
-Update it to include the database password you made when creating your supabase project, as it will replace `[YOUR-PASSWORD]` in the string from the UI.
+Update it to include the database password you made when creating your supabase project, as it will replace `[YOUR-PASSWORD]` in the string from the supabase UI.
 
 Add the string to your .env file as `DATABASE_URL` to be able to work with prisma.
 
 #### Supabase redirect URL
 
-By default, the Supabase redirect URL for sign-in defaults to `localhost:3000`. Currently, a sveltekit/vite project runs on `localhost:5173` by default. You'll need to update one of these to get auth working. To do this in supabase, open the dashboard and navigate to:
+By default, the Supabase redirect URL for sign-in defaults to `localhost:3000`. 
+Currently, a sveltekit/vite project runs on `localhost:5173` by default. 
+You'll need to update one of these to get auth working. To do this in supabase, 
+open the dashboard and navigate to:
 
 1. `-> Authentication`
 2. `-> URL Configuration`
 3. `-> Site URL`
 
 Update the value from `http://localhost:3000` to `http://localhost:5173` and press `Save`. Afterwards your sign in should work!
+
+At the end, it should look something like this, with the values in [BRACKETS] replaced with your supabase values:
+
+```
+PUBLIC_SUPABASE_URL="https://[YOUR_SUPABASE_URL].supabase.co"
+PUBLIC_SUPABASE_ANON_KEY="[YOUR_SUPABASE_ANON_KEY]"
+
+DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR_SUPABASE_URL].supabase.co:5432/postgres"
+```
 
 ## Developing
 
