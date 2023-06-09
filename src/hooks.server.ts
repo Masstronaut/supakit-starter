@@ -1,39 +1,45 @@
-import '$lib/supabase';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
+import type { Handle } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma';
+import { Prisma } from '@prisma/client';
 import type { User } from '@prisma/client';
 import type { Session } from '@supabase/supabase-js';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-
-let user: User | null = null;
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const { session, supabaseClient } = await getSupabase(event);
+	event.locals.supabase = createSupabaseServerClient({
+		supabaseUrl: PUBLIC_SUPABASE_URL,
+		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
+		event
+	});
 
-	event.locals.sb = supabaseClient;
-	event.locals.session = session;
-
-	if (session && !user) {
-		user = await getUser(session);
-	} else if (session && user && user.id !== session.user.id) {
-		user = await getUser(session);
+	/**
+	 * a little helper that is written for convenience so that instead
+	 * of calling `const { data: { session } } = await supabase.auth.getSession()`
+	 * you just call this `await getSession()`
+	 */
+	event.locals.getSession = async () => {
+		const {
+			data: { session }
+		} = await event.locals.supabase.auth.getSession();
+		return session as Session;
+	};
+	if (!event.locals.user) {
+		event.locals.user = await getUser(await event.locals.getSession());
+		console.log('getting the user from hooks.server.ts');
+	} else {
+		console.log('User was already cached in locals');
 	}
-	event.locals.user = user;
-
-	if (event.url.pathname.startsWith('/settings') && !session) {
-		throw redirect(303, '/login');
-	} else if (event.url.pathname.startsWith('/admin')) {
-		if (!session) {
-			throw redirect(303, '/login');
-		} else if (user && user.role !== 'admin') {
-			throw redirect(303, '/');
+	return resolve(event, {
+		/**
+		 * There´s an issue with `filterSerializedResponseHeaders` not working when using `sequence`
+		 *
+		 * https://github.com/sveltejs/kit/issues/8061
+		 */
+		filterSerializedResponseHeaders(name) {
+			return name === 'content-range';
 		}
-	}
-
-	const response = resolve(event);
-
-	return response;
+	});
 };
 
 async function getUser(session: Session): Promise<User | null> {
@@ -46,11 +52,11 @@ async function getUser(session: Session): Promise<User | null> {
 		});
 		return user;
 	} catch (e) {
-		if (!(e instanceof PrismaClientKnownRequestError)) {
+		if (!(e instanceof Prisma.PrismaClientKnownRequestError)) {
 			console.error("An unexpected error occurred while trying to get the user's data", e);
 			return null;
 		}
-		const error = e as PrismaClientKnownRequestError;
+		const error = e as Prisma.PrismaClientKnownRequestError;
 		// the user hasn't been added to the User table yet
 
 		const { randomBytes } = await import('node:crypto');

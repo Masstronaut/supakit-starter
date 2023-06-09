@@ -3,8 +3,9 @@ import type { Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.session !== null) {
+export const load: PageServerLoad = async ({ locals, parent }) => {
+	const { session } = await parent();
+	if (session !== null) {
 		throw redirect(303, '/');
 	}
 };
@@ -17,10 +18,10 @@ const getURL = () => {
 };
 
 export const actions: Actions = {
-	login: async ({ locals, request }) => {
+	login: async ({ locals, request, fetch }) => {
 		const formData = Object.fromEntries(await request.formData());
 		const email = formData.email as string;
-		const signInResult = await locals.sb.auth.signInWithOtp({
+		const signInResult = await locals.supabase.auth.signInWithOtp({
 			email,
 			options: {
 				emailRedirectTo: getURL()

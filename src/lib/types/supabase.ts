@@ -9,43 +9,7 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      AccountSettings: {
-        Row: {
-          userId: string
-          theme: string
-        }
-        Insert: {
-          userId: string
-          theme: string
-        }
-        Update: {
-          userId?: string
-          theme?: string
-        }
-      }
-      User: {
-        Row: {
-          id: string
-          username: string
-          photo: string
-          role: Database["public"]["Enums"]["role"]
-          createdAt: string
-        }
-        Insert: {
-          id: string
-          username: string
-          photo: string
-          role?: Database["public"]["Enums"]["role"]
-          createdAt: string
-        }
-        Update: {
-          id?: string
-          username?: string
-          photo?: string
-          role?: Database["public"]["Enums"]["role"]
-          createdAt?: string
-        }
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
@@ -54,7 +18,10 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      role: "admin" | "user"
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }

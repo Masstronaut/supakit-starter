@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { supabase } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import type { LayoutData } from '../../$types';
 
 	export let data: LayoutData;
+	$: ({ supabase, session } = data);
 	data.session?.user.role;
 
 	const avatarStatusDescriptionOptions = {
@@ -57,7 +57,7 @@
 		<p>{avatarStatusDescription}</p>
 		{#if avatarBucketStatus === 'not-exists'}
 			<form method="post" class="card-actions" action="?/createAvatarsBucket" use:enhance>
-				<button type="submit" class="btn btn-primary">Make avatars bucket</button>
+				<button type="submit" class="btn-primary btn">Make avatars bucket</button>
 			</form>
 		{/if}
 	</div>

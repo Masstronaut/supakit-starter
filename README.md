@@ -31,18 +31,25 @@ Once done, you'll need to create a `.env` file at the root of your project and a
 
 These values can be found on your project's homepage on supabase. the URL will look like `https://app.supabase.com/project/{Your Project ID}`
 
-Finally, you'll need to add one more `.env` value that `prisma` will use to connect to your database. It's the "connection string" URI.
+To get type information into the supabase client, you'll also need to link supabase CLI with your remote instance so it can generate type definitions for your database. There is a script in `package.json` for this already.
+
+1. [Link your supabase client to the server instance](https://supabase.com/docs/reference/cli/supabase-link)
+2. Run `npm run .env supabase:typegen`.
+
+#### Setting up prisma
+
+You'll need to add one more `.env` value that `prisma` will use to connect to your database. It's the "connection string" URI.
 You can find the URI for your project through the supabase UI by going to `Project Settings` -> `Database` -> `Connection string` and selecting "URI"
 
 Update it to include the database password you made when creating your supabase project, as it will replace `[YOUR-PASSWORD]` in the string from the supabase UI.
 
-Add the string to your .env file as `DATABASE_URL` to be able to work with prisma.
+Add the string to your .env file as `DATABASE_URL` to be able to work with prisma. Then run `npm run db:init` to push the schema defined in `schema.prisma` to your supabase DB instance.
 
 #### Supabase redirect URL
 
-By default, the Supabase redirect URL for sign-in defaults to `localhost:3000`. 
-Currently, a sveltekit/vite project runs on `localhost:5173` by default. 
-You'll need to update one of these to get auth working. To do this in supabase, 
+By default, the Supabase redirect URL for sign-in defaults to `localhost:3000`.
+Currently, a sveltekit/vite project runs on `localhost:5173` by default.
+You'll need to update one of these to get auth working. To do this in supabase,
 open the dashboard and navigate to:
 
 1. `-> Authentication`

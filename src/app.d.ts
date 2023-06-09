@@ -4,7 +4,6 @@ import type { Session } from '@supabase/supabase-js';
 import type { User } from '@prisma/client';
 import type { Database } from '$lib/types/supabase';
 
-
 declare global {
 	declare namespace App {
 		interface Supabase {
@@ -12,8 +11,8 @@ declare global {
 			SchemaName: 'public';
 		}
 		interface Locals {
-			sb: TypedSupabaseClient;
-			session: Session | null;
+			supabase: TypedSupabaseClient;
+			getSession: () => Promise<Session>;
 			user: User | null;
 		}
 		interface PageData {

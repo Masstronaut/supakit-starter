@@ -4,13 +4,31 @@
 	import { Toaster } from 'svelte-french-toast';
 	import type { LayoutData } from './$types';
 	import ProfileIcon from '$lib/components/ProfileIcon.svelte';
+	import { onMount } from 'svelte';
+	import { invalidate } from '$app/navigation';
 
 	export let data: LayoutData;
+	$: ({ supabase, session, user } = data);
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabase.auth.onAuthStateChange((event, _session) => {
+			console.log("auth change event: '" + event + "'");
+			if (_session?.expires_at !== session?.expires_at) {
+				// This triggers a reload of the supabase client & session in `+layout.ts`
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => subscription.unsubscribe();
+	});
 
 	const cta = { title: 'Signup / Login', href: '/login' };
 	const title = { title: 'SupaKit', href: '/' };
 	const navItems = [
-		{ title: 'Item 1', href: '' },
+		{ title: 'Home', href: '/' },
+		{ title: 'Blog', href: '/blog' },
 		{
 			title: 'Parent',
 			href: '',
@@ -27,10 +45,10 @@
 <Toaster />
 <Header {title} {navItems}>
 	<div slot="cta">
-		{#if data.session === null}
+		{#if session === null || user === null}
 			<a class="btn" href={cta.href}>{cta.title}</a>
-		{:else if data.user}
-			<ProfileIcon user={data.user} />
+		{:else if session && user}
+			<ProfileIcon {user} />
 		{/if}
 	</div>
 </Header>
