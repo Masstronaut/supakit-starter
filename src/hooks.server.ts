@@ -1,5 +1,5 @@
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma';
 import { Prisma } from '@prisma/client';
 import type { User } from '@prisma/client';
@@ -29,6 +29,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.log('getting the user from hooks.server.ts');
 	} else {
 		console.log('User was already cached in locals');
+	}
+	if (event.route.id?.startsWith('/admin')) {
+		if (!event.locals.user) throw redirect(303, '/login');
+		else if (event.locals.user.role !== 'admin') throw redirect(303, '/');
 	}
 	return resolve(event, {
 		/**

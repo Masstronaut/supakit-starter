@@ -1,15 +1,14 @@
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { z } from 'zod';
 	import toast from 'svelte-french-toast';
-	import { Input } from '$lib/components';
-	import Button from './Button.svelte';
+	import { Input, Button } from '$lib/components';
 
 	let loading = false;
 
 	let emailSent = false;
 	let sentEmailAddress = '';
-	const submitLogin: SubmitFunction = () => {
+	const submitLog = () => {
 		loading = true;
 		return async ({ result, update }) => {
 			switch (result.type) {
@@ -51,12 +50,11 @@
 	<form
 		method="post"
 		action="/login?/login"
-		class="w-full max-w-lg mx-auto mt-12"
-		use:enhance={submitLogin}
-	>
-		<h1 class="text-3xl font-medium text-center dark:text-white">Login/Signup</h1>
+		class="mx-auto mt-12 w-full max-w-lg"
+		use:enhance={submitLogin}>
+		<h1 class="text-center text-3xl font-medium dark:text-white">Login/Signup</h1>
 		<p class="text-center dark:text-white">We will send you a magic link. Click it to sign in.</p>
-		<div class="grid gap-6 mb-6">
+		<div class="mb-6 grid gap-6">
 			<div>
 				<Input
 					label="Email address"
@@ -65,17 +63,15 @@
 					type="email"
 					{value}
 					required={true}
-					errors={[]}
-				/>
+					errors={[]} />
 			</div>
 			<Button {loading} disabled={loading} type="submit"
-				>{loading ? 'Loading' : 'Send magic link'}</Button
-			>
+				>{loading ? 'Loading' : 'Send magic link'}</Button>
 		</div>
 	</form>
 {:else}
-	<div class="w-full max-w-lg mx-auto mt-12">
-		<h1 class="text-3xl font-medium text-center dark:text-white">Login/Signup</h1>
+	<div class="mx-auto mt-12 w-full max-w-lg">
+		<h1 class="text-center text-3xl font-medium dark:text-white">Login/Signup</h1>
 		<p class="text-center dark:text-white">
 			We have sent your magic link to <em>{sentEmailAddress}</em>. Click it to sign in.
 		</p>

@@ -4,10 +4,10 @@
 	export let user: User;
 </script>
 
-<div class="dropdown dropdown-end">
+<div class="dropdown-end dropdown">
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<label tabindex="0" class="btn btn-ghost btn-circle avatar">
+	<label tabindex="0" class="btn-ghost btn-circle avatar btn">
 		<div class="w-10 rounded-full">
 			<img src={user.photo} alt="none" />
 		</div>
@@ -15,8 +15,10 @@
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul
 		tabindex="0"
-		class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-	>
+		class="menu-compact dropdown-content menu rounded-box mt-3 w-52 bg-base-100 p-2 shadow">
+		{#if user.role === 'admin'}
+			<li><a href="/admin/users">Manage users</a></li>
+		{/if}
 		<li><a href="/settings/account">Settings</a></li>
 		<li>
 			<form action="/logout" method="post">

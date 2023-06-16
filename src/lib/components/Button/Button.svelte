@@ -1,7 +1,11 @@
+<script lang="ts" context="module">
+	export type ButtonPalette = 'primary' | 'secondary' | 'accent' | 'ghost';
+</script>
+
 <script lang="ts">
 	export let loading = false;
 	export let disabled = false;
-	export let palette: 'primary' | 'secondary' | 'accent' | 'ghost' = 'primary';
+	export let palette: ButtonPalette = 'primary';
 	export let variant: 'solid' | 'outline' = 'solid';
 	export let type: 'submit' | 'button' | 'reset' | null | undefined = 'button';
 </script>
@@ -19,7 +23,6 @@
 	class:btn-ghost={palette === 'ghost'}
 	class:text-base-content={palette === 'ghost'}
 	class:btn-outline={variant === 'outline'}
-	{type}
->
+	{type}>
 	<slot />
 </button>
