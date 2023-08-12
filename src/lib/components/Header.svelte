@@ -76,3 +76,32 @@
 		<slot name="cta" />
 	</div>
 </div>
+
+<style>
+	/*
+	 * Create a directionally aware hover underline effect.
+	 * via https://www.youtube.com/watch?v=G_h2pGZcOzc
+	 */
+	.menu > li::after {
+		content: '';
+		width: 100%;
+		background-color: hsl(var(--p));
+		height: 3px;
+		scale: var(--_width, 0) 1;
+		translate: var(--_translate, 0);
+		transition: scale 200ms var(--_scale_delay, 0ms), translate 400ms var(--_translate_delay, 0ms);
+	}
+	.menu > li:hover {
+		--_width: 1;
+	}
+	.menu > li:has(+ :hover) {
+		--_translate: 100%;
+		--_scale_delay: 200ms;
+		--_translate_delay: 100ms;
+	}
+	.menu > li:hover + li {
+		--_translate: -100%;
+		--_scale_delay: 200ms;
+		--_translate_delay: 100ms;
+	}
+</style>
