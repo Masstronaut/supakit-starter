@@ -8,15 +8,14 @@
 	import { invalidate } from '$app/navigation';
 
 	export let data: LayoutData;
-	$: ({ supabase, session, user } = data);
+	let { supabase, session } = data;
+	$: ({ supabase, session } = data);
 
 	onMount(() => {
 		const {
 			data: { subscription }
 		} = supabase.auth.onAuthStateChange((event, _session) => {
-			console.log("auth change event: '" + event + "'");
 			if (_session?.expires_at !== session?.expires_at) {
-				// This triggers a reload of the supabase client & session in `+layout.ts`
 				invalidate('supabase:auth');
 			}
 		});
@@ -40,6 +39,8 @@
 		},
 		{ title: 'Item 3', href: '' }
 	];
+
+	const user = null;
 </script>
 
 <Toaster />

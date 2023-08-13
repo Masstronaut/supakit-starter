@@ -3,12 +3,13 @@
 	import { z } from 'zod';
 	import toast from 'svelte-french-toast';
 	import { Input, Button } from '$lib/components';
-
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { page } from '$app/stores';
 	let loading = false;
 
 	let emailSent = false;
 	let sentEmailAddress = '';
-	const submitLog = () => {
+	const submitLogin: SubmitFunction = () => {
 		loading = true;
 		return async ({ result, update }) => {
 			switch (result.type) {
@@ -49,7 +50,7 @@
 {#if !emailSent}
 	<form
 		method="post"
-		action="/login?/login"
+		action={`${$page.url.origin}/login?/login`}
 		class="mx-auto mt-12 w-full max-w-lg"
 		use:enhance={submitLogin}>
 		<h1 class="text-center text-3xl font-medium dark:text-white">Login/Signup</h1>

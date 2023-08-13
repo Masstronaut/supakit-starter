@@ -17,7 +17,7 @@
 		tabindex="0"
 		class="menu-compact dropdown-content menu rounded-box mt-3 w-52 bg-base-100 p-2 shadow">
 		{#if user.role === 'admin'}
-			<li><a href="/admin/users">Manage users</a></li>
+			<li><a href="/admin">Admin</a></li>
 		{/if}
 		<li><a href="/settings/account">Settings</a></li>
 		<li>

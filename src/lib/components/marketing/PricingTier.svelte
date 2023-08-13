@@ -2,7 +2,6 @@
 	import { Icon } from '@steeze-ui/svelte-icon';
 	import { CheckCircle } from '@steeze-ui/heroicons';
 	import { z } from 'zod';
-	import { Button } from '$lib/components';
 	import type { IconSource } from '@steeze-ui/svelte-icon/types';
 
 	const tierSchema = z.object({
@@ -23,21 +22,21 @@
 	export let billingCadence: 'monthly' | 'yearly' | 'once' = 'monthly';
 </script>
 
-<div class="flex flex-row w-full justify-center gap-12 my-8">
+<div class="my-8 flex w-full flex-row justify-center gap-12">
 	{#each tiers as tier}
 		<section
-			class="text-base-content flex-1 max-w-xs p-4 border-base-content/30 border-solid border rounded-md flex flex-col"
+			class="flex max-w-xs flex-1 flex-col rounded-md border border-solid border-base-content/30 p-4 text-base-content"
 			class:primary={tier.primary}
 			class:w-72={tier.primary}
 			class:my-8={!tier.primary}
 			class:my-6={tier.primary}
 			class:text-primary-content={tier.primary}
 			class:scale-110={tier.primary}>
-			<div class="w-10 h-10 mt-4 self-center">
+			<div class="mt-4 h-10 w-10 self-center">
 				<Icon src={tier.icon} theme="outline" class="text-base-content" />
 			</div>
-			<h3 class="text-3xl font-bold text-center mb-6">{tier.title}</h3>
-			<p class=" text-center mb-2">
+			<h3 class="mb-6 text-center text-3xl font-bold">{tier.title}</h3>
+			<p class=" mb-2 text-center">
 				$<span class="text-3xl font-bold">{tier.price}</span>
 				{#if billingCadence === 'monthly'}
 					/ month
@@ -45,15 +44,15 @@
 					/ year
 				{:else if billingCadence === 'once'}{''}{/if}
 			</p>
-			<p class="text-center mb-6 ">{tier.description}</p>
-			<a class="btn btn-outline" class:btn-primary={tier.primary} href={tier.url}>
+			<p class="mb-6 text-center">{tier.description}</p>
+			<a class="btn-outline btn" class:btn-primary={tier.primary} href={tier.url}>
 				{tier.cta}
 			</a>
-			<p class="text-center mt-6 mb-2">{tier.features.intro}</p>
-			<ul class="self-center mt-2">
+			<p class="mb-2 mt-6 text-center">{tier.features.intro}</p>
+			<ul class="mt-2 self-center">
 				{#each tier.features.list as feature}
-					<li class="list-none flex items-center mb-2">
-						<Icon src={CheckCircle} theme="solid" class="w-5 h-5 text-success mr-2" />
+					<li class="mb-2 flex list-none items-center">
+						<Icon src={CheckCircle} theme="solid" class="mr-2 h-5 w-5 text-success" />
 						<span>{feature}</span>
 					</li>
 				{/each}
