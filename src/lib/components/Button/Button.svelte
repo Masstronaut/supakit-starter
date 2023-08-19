@@ -23,6 +23,7 @@
 	class:btn-ghost={palette === 'ghost'}
 	class:text-base-content={palette === 'ghost'}
 	class:btn-outline={variant === 'outline'}
-	{type}>
+	{type}
+	{...$$props}>
 	<slot />
 </button>

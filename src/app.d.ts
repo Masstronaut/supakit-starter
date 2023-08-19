@@ -1,21 +1,20 @@
 // See https://kit.svelte.dev/docs/types#app
-import type { Session, SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '$lib/types/supabase';
+import type { User } from '@prisma/client';
 
 declare global {
 	declare namespace App {
-		interface Supabase {
-			Database: Database;
-			SchemaName: 'public';
-		}
 		interface Locals {
-			supabase: SupabaseClient<Database>;
-			getSession: () => Promise<Session | null>;
+			auth: import('lucia').AuthRequest;
 		}
-		interface PageData {
-			session: Session | null;
-		}
+		// interface PageData {}
 		// interface Error {}
 		// interface Platform {}
 	}
+	namespace Lucia {
+		type Auth = import('$lib/server/lucia').Auth;
+		type DatabaseUserAttributes = Omit<User, 'id'>;
+		type DatabaseSessionAttributes = {};
+	}
 }
+// Allegedly this is important for lucia. I don't know why. 🤷‍♂️
+export {};

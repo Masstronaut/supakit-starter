@@ -2,54 +2,26 @@
 	import '../app.postcss';
 	import { Header } from '$lib/components';
 	import { Toaster } from 'svelte-french-toast';
-	import type { LayoutData } from './$types';
-	import ProfileIcon from '$lib/components/ProfileIcon.svelte';
-	import { onMount } from 'svelte';
-	import { invalidate } from '$app/navigation';
+	import type { PageData } from './$types';
+	export let data: PageData;
 
-	export let data: LayoutData;
-	let { supabase, session } = data;
-	$: ({ supabase, session } = data);
-
-	onMount(() => {
-		const {
-			data: { subscription }
-		} = supabase.auth.onAuthStateChange((event, _session) => {
-			if (_session?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
-
-		return () => subscription.unsubscribe();
-	});
-
-	const cta = { title: 'Signup / Login', href: '/login' };
 	const title = { title: 'SupaKit', href: '/' };
-	const navItems = [
-		{ title: 'Home', href: '/' },
-		{ title: 'Blog', href: '/blog' },
-		{
-			title: 'Parent',
-			href: '',
-			children: [
-				{ title: 'Submenu 1', href: '' },
-				{ title: 'Submenu 2', href: '' },
-				{ title: 'Submenu 3', href: '' }
-			]
-		},
-		{ title: 'Item 3', href: '' }
-	];
-
-	const user = null;
+	const navItems = [{ title: 'Home', href: '/' }];
+	if (data.session) {
+		navItems.push({ title: 'App', href: '/app' });
+	}
 </script>
 
 <Toaster />
 <Header {title} {navItems}>
 	<div slot="cta">
-		{#if session === null || user === null}
-			<a class="btn" href={cta.href}>{cta.title}</a>
-		{:else if session && user}
-			<ProfileIcon {user} />
+		{#if !data.session}
+			<a href="/signin" class="btn">Sign in</a>
+			<a href="/signup" class="btn-primary btn">Sign up</a>
+		{:else}
+			<form action="/signout" method="post">
+				<button class="btn-ghost btn" type="submit">Sign out</button>
+			</form>
 		{/if}
 	</div>
 </Header>
